@@ -55,4 +55,3 @@ def parseTags(tagMessage):
         keyValue = tag.split("=")
         tagDir[keyValue[0]] = keyValue[1]
     return tagDir
-    
