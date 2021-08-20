@@ -30,9 +30,6 @@ jobs:
         with:
         # Version range or exact version of a Python version to use, using SemVer's version range syntax.
           python-version: 3.7
-          
-      - name: Install dependency
-        run: "python -m pip install compileall"
         
       - name: Build files
         run: "python -m compileall ."
