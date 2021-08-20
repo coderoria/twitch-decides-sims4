@@ -32,7 +32,7 @@ jobs:
           python-version: 3.7
         
       - name: Build files
-        run: "python -m compileall -b . && zip tds.ts4script -r **.pyc"
+        run: "python -m compileall -b . && zip tds.ts4script -r . -i '*.pyc'"
         
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.2.4
