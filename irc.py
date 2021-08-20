@@ -10,20 +10,24 @@ SERVER = "irc.chat.twitch.tv"
 
 def connect(_context):
     config.reload();
+    TOKEN = str(config.config["IRC"]["token"])
+    NICK = str(config.config["IRC"]["nick"])
+    CHANNEL = str(config.config["IRC"]["channel"])
+    
     output = sims4.commands.CheatOutput(_context)
-    output("Connecting to IRC (" + str(config.config["IRC"]["channel"]) + ")")
+    output("Connecting to IRC (" + CHANNEL + ")")
     try:
         ircsock.connect((SERVER, 6667))
         # authenticate with token provided in config
-        ircsock.send(bytes("PASS oauth:" + str(config.config["IRC"]["token"]) + "\n", "UTF-8"))
+        ircsock.send(bytes("PASS oauth:" + TOKEN + "\n", "UTF-8"))
         # provide nick from config
-        ircsock.send(bytes("NICK " + str(config.config["IRC"]["nick"]) + "\n", "UTF-8"))
+        ircsock.send(bytes("NICK " + NICK + "\n", "UTF-8"))
         # join channel
-        ircsock.send(bytes("JOIN " + str(config.config["IRC"]["channel"]) + "\n", "UTF-8"))
+        ircsock.send(bytes("JOIN " + CHANNEL + "\n", "UTF-8"))
         # require capability for user tags
         ircsock.send(bytes("CAP REQ :twitch.tv/tags\n", "UTF-8"))
         # send startup message to chat
-        ircsock.send(bytes("PRIVMSG " + str(config.config["IRC"]["channel"]) + " :Sims 4 connected to chat." + "\n", "UTF-8"))
+        ircsock.send(bytes("PRIVMSG " + CHANNEL + " :Sims 4 connected to chat." + "\n", "UTF-8"))
         while 1:
             ircmsg = ircsock.recv(2048).decode("UTF-8")
             ircmsg = ircmsg.strip('\r\n')
@@ -37,7 +41,7 @@ def connect(_context):
 def parseMessage(data, _context):
     output = sims4.commands.CheatOutput(_context)
     # [FULLMATCH, TAGS, USERNAME, MESSAGE]
-    messageMatch = re.match(r'^@(\S+)\s:(\S+)!\S+\sPRIVMSG\s#coderoria\s:(.*)$', data);
+    messageMatch = re.match(r'^@(\S+)\s:(\S+)!\S+\sPRIVMSG\s'+ CHANNEL +'\s:(.*)$', data);
     if not bool(messageMatch):
         return
     tags = parseTags(messageMatch.group(1))
