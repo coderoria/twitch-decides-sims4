@@ -2,6 +2,7 @@ import sims4.commands
 import irc
 import threading
 
+sims4.commands.output = lambda s,_connection: sims4.commands.cheatOutput(s, _connection)
 
 @sims4.commands.Command('tds', command_type=sims4.commands.CommandType.Live)
 def init(_connection=None):
