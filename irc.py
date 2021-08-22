@@ -7,6 +7,7 @@ import re
 
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 SERVER = "irc.chat.twitch.tv"
+CHANNEL = ""
 
 def connect(_context):
     config.reload();
